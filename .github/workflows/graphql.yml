@@ -1,4 +1,4 @@
-name: "POST rename_branch"
+name: "Add Pull Request Comment"
 on:
   push:
   workflow_dispatch:
@@ -11,6 +11,7 @@ jobs:
         run: |
           curl -H "Authorization: bearer $GH_TOKEN" -X POST -d " \
            { \
-             \"query\": \"query { viewer { login }}\" \
+             \"query\": \"query { repository(owner:\"cmsc389T-spring23\", \
+             name:\"Lecture11\") { pullRequests(last:1) {nodes {id}} }}\" \
            } \
           " https://api.github.com/graphql
