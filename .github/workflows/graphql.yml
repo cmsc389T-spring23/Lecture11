@@ -1,0 +1,28 @@
+name: "Add Pull Request Comment"
+on:
+  pull_request:
+jobs:
+  use_api:
+    runs-on: ubuntu-latest
+    steps:
+      - env:
+          GH_TOKEN: ${{ secrets.TOKEN }}
+        run: |
+          # Find the Pull Request ID
+          response=$(curl -H "Authorization: bearer $GH_TOKEN" -X POST -d " \
+           { \
+             \"query\": \"query { repository(owner: \\\"cmsc389T-spring23\\\", name: \\\"Lecture11\\\") { pullRequests(last:1) { nodes { id } } } }\" \
+           } \
+          " https://api.github.com/graphql)
+          echo $response
+          tmp=${response#*PR_}
+          pr_id=PR_${tmp%\"*}
+          echo $pr_id
+          
+          # Add A Comment
+          comment="Writing A New Comment"
+          curl -H "Authorization: bearer $GH_TOKEN" -X POST -d " \
+           { \
+             \"query\": \"mutation { addComment(input: { body: \\\"$comment\\\", subjectId: \\\"$pr_id\\\" }) { clientMutationId } }\" \
+           } \
+          " https://api.github.com/graphql
