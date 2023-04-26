@@ -21,8 +21,9 @@ jobs:
           echo $pr_id
           
           # Add A Comment
+          comment="Writing A New Comment"
           curl -H "Authorization: bearer $GH_TOKEN" -X POST -d " \
            { \
-             \"query\": \"mutation { addComment(body: \\\"Writing A New Comment\\\", subjectID: \\\"$pr_id\\\") { clientMutationId } }\" \
+             \"query\": \"mutation { addComment(input: { body: \\\"$comment\\\", subjectID: \\\"$pr_id\\\" }) { clientMutationId } }\" \
            } \
           " https://api.github.com/graphql
