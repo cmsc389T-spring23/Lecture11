@@ -9,8 +9,9 @@ jobs:
       - env:
           GH_TOKEN: ${{ secrets.TOKEN }}
         run: |
-          curl -H "Authorization: bearer $GH_TOKEN" -X POST -d " \
+          response=$(curl -H "Authorization: bearer $GH_TOKEN" -X POST -d " \
            { \
              \"query\": \"query { repository(owner: \\\"cmsc389T-spring23\\\", name: \\\"Lecture11\\\") { pullRequests(last:1) { nodes { id } } } }\" \
            } \
-          " https://api.github.com/graphql
+          " https://api.github.com/graphql)
+          echo $response
